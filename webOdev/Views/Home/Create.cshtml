@@ -1,0 +1,24 @@
+﻿@model webOdev.Models.EmergencyViewModel
+
+<h2>Create Emergency</h2>
+
+<form asp-action="CreateEmergency" method="post">
+    <div class="mb-3">
+        <label for="Title" class="form-label">Emergency Title</label>
+        <input asp-for="Title" class="form-control" id="Title" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="Message" class="form-label">Emergency Message</label>
+        <textarea asp-for="Message" class="form-control" id="Message"></textarea>
+        <span asp-validation-for="Message" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-danger">Send Emergency</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

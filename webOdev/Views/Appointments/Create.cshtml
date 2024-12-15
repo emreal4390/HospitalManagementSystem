@@ -1,0 +1,96 @@
+﻿@model webOdev.Models.Appointment
+
+<h2>Book an Appointment</h2>
+
+<div id="responseMessage" class="alert d-none"></div> <!-- Dinamik mesaj için -->
+
+<form id="appointmentForm">
+    <div class="mb-3">
+        <label for="PatientName" class="form-label">Patient Name</label>
+        <input asp-for="PatientName" class="form-control" id="PatientName" />
+        <span asp-validation-for="PatientName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label for="Date" class="form-label">Date</label>
+        <input asp-for="Date" type="date" class="form-control" id="Date" />
+        <span asp-validation-for="Date" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label for="Time" class="form-label">Time</label>
+        <select asp-for="Time" class="form-control" id="Time">
+            @foreach (var time in AppointmentHelper.GetAvailableTimes())
+            {
+                <option value="@time">@time</option>
+            }
+        </select>
+        <span asp-validation-for="Time" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label for="DoctorId" class="form-label">Select Doctor</label>
+        <select asp-for="DoctorId" class="form-control" id="DoctorId">
+            @foreach (var doctor in ViewBag.Doctors)
+            {
+                <option value="@doctor.Id">@doctor.Name</option>
+            }
+        </select>
+        <span asp-validation-for="DoctorId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label for="AssistantId" class="form-label">Select Assistant</label>
+        <select asp-for="AssistantId" class="form-control" id="AssistantId">
+            @foreach (var assistant in ViewBag.Assistants)
+            {
+                <option value="@assistant.Id">@assistant.Name</option>
+            }
+        </select>
+        <span asp-validation-for="AssistantId" class="text-danger"></span>
+    </div>
+
+    <button type="button" class="btn btn-primary" id="submitBtn">Create Appointment</button>
+</form>
+
+@section Scripts {
+    <script>
+        document.getElementById("submitBtn").addEventListener("click", function () {
+            const formData = {
+                PatientName: document.getElementById("PatientName").value,
+                Date: document.getElementById("Date").value,
+                Time: document.getElementById("Time").value,
+                DoctorId: document.getElementById("DoctorId").value,
+                AssistantId: document.getElementById("AssistantId").value
+            };
+
+            fetch('/Appointments/CreateAjax', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const responseMessage = document.getElementById("responseMessage");
+                    responseMessage.classList.remove("d-none");
+                    if (data.success) {
+                        responseMessage.classList.add("alert-success");
+                        responseMessage.classList.remove("alert-danger");
+                        responseMessage.innerText = data.message;
+
+                        // Formu temizle
+                        document.getElementById("appointmentForm").reset();
+                    } else {
+                        responseMessage.classList.add("alert-danger");
+                        responseMessage.classList.remove("alert-success");
+                        responseMessage.innerText = data.message;
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        });
+    </script>
+}

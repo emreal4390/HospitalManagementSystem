@@ -1,0 +1,59 @@
+﻿@model IEnumerable<webOdev.Models.Schedule>
+
+<h2 class="mb-4">Schedule</h2>
+
+<!-- Takvim Görünümü -->
+<div id="calendar"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth', // Month view
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            events: [
+    @foreach (var schedule in Model)
+    {
+        @:{
+        @:title: "@schedule.Title",
+        @:start: "@schedule.StartTime.ToString("yyyy-MM-ddTHH:mm:ss")",
+        @:end: "@schedule.EndTime.ToString("yyyy-MM-ddTHH:mm:ss")",
+        @: },
+    }
+                ]
+    });
+
+    calendar.render();
+        });
+</script>
+
+<!-- Kart Görünümü -->
+<div class="row row-cols-1 row-cols-md-2 g-4 mt-4">
+    @foreach (var schedule in Model)
+    {
+        <div class="col">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">@schedule.Title</h5>
+                    <p class="card-text">
+                        <strong>Start:</strong> @schedule.StartTime<br />
+                        <strong>End:</strong> @schedule.EndTime<br />
+                        <strong>Assigned To:</strong> @schedule.AssignedTo<br />
+                        <strong>Department:</strong> @schedule.Department
+                    </p>
+                    @if (Context.Session.GetString("Role") == "Admin")
+                    {
+                        <a asp-action="Edit" asp-route-id="@schedule.Id" class="btn btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@schedule.Id" class="btn btn-danger">Delete</a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    }
+</div>

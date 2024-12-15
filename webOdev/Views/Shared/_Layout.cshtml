@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Web Odev</title>
+    <link href="~/css/site.css" rel="stylesheet" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Web Odev</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+                    @if (Context.Session.GetString("Role") != "Admin")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Appointments/Create">Book an Appointment</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Account/Login">Login</a>
+                    </li>}
+                    
+                   
+                   
+                    @if (Context.Session.GetString("Role") == "Admin") // admin girişi yapıldığında gösterdiğimiz navbar itemleri
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Assistant">Assistants</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Doctor">Doctors</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Department">Departments</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Appointments">Appointments</a>
+                        </li>
+                    }
+                    
+                    @if (!string.IsNullOrEmpty(Context.Session.GetString("Username"))) // Giriş yapmış kullanıcı kontrolü
+                    {
+                        <li class="nav-item">
+                            <form method="post" asp-controller="Account" asp-action="Logout">
+                                <button class="btn btn-link nav-link" type="submit">Logout</button>
+                            </form>
+                        </li>
+                    }
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+   
+    <!-- Main Content -->
+    <div class="container mt-4">
+        @RenderBody()
+    </div>
+
+    
+
+    @RenderSection("Scripts", required: false)
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Popper.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>

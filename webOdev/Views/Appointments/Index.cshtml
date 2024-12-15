@@ -1,0 +1,36 @@
+﻿@model IEnumerable<webOdev.Models.Appointment>
+
+<h2>Appointments</h2>
+
+@{
+    var doctors = ViewBag.Doctors as List<webOdev.Models.Doctor>;
+    var assistants = ViewBag.Assistants as List<webOdev.Models.Assistant>;
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Patient Name</th>
+            <th>Doctor</th>
+            <th>Assistant</th>
+            <th>Date</th>
+            <th>Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var appointment in Model)
+        {
+            <tr>
+                <td>@appointment.PatientName</td>
+                <td>
+                    @doctors?.FirstOrDefault(d => d.Id == appointment.DoctorId)?.Name
+                </td>
+                <td>
+                    @assistants?.FirstOrDefault(a => a.Id == appointment.AssistantId)?.Name
+                </td>
+                <td>@appointment.Date.ToShortDateString()</td>
+                <td>@appointment.Time</td>
+            </tr>
+        }
+    </tbody>
+</table>

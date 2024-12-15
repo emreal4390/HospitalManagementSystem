@@ -1,0 +1,121 @@
+﻿@model IEnumerable<webOdev.Models.Schedule>
+
+@{
+    var role = ViewData["Role"] as string; // ViewData'dan rol bilgisi alınıyor
+    var username = ViewData["Username"] as string; // ViewData'dan kullanıcı adı alınıyor
+
+    if (role == null) role = "Guest"; // Eğer null ise, "Guest" rolü atanır
+    if (username == null) username = "User"; // Eğer null ise, "Unknown" kullanıcı adı atanır
+}
+
+<h2>Welcome, @username!</h2>
+
+@if (role == "Admin")
+{
+    <p>Welcome Admin. You can manage schedules and anything here.</p>
+    <a href="/Schedule/Create" class="btn btn-primary mb-3">Create New Schedule</a>
+    @if (Context.Session.GetString("Role") == "Admin")
+    {
+        <a asp-action="CreateEmergency" class="btn btn-danger mb-3">Create New Emergency</a>
+    }
+
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+
+<h2 class="schedule-title">Schedule</h2>
+
+<!-- Takvim Görünümü -->
+<div id="calendar" class="mb-4"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth', // Month view
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            events: [
+    @foreach (var schedule in Model)
+    {
+        @: {
+        @: title: "@schedule.Title",
+        @: start: "@schedule.StartTime.ToString("yyyy-MM-ddTHH:mm:ss")",
+        @: end: "@schedule.EndTime.ToString("yyyy-MM-ddTHH:mm:ss")",
+        @: },
+    }
+            ]
+        });
+
+        calendar.render();
+    });
+</script>
+
+<!-- Kart Görünümü -->
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    @foreach (var schedule in Model)
+    {
+        <div class="col">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">@schedule.Title</h5>
+                    <p class="card-text">
+                        <strong>Start:</strong> @schedule.StartTime<br />
+                        <strong>End:</strong> @schedule.EndTime<br />
+                        <strong>Assigned To:</strong> @schedule.AssignedTo<br />
+                        <strong>Department:</strong> @schedule.Department
+                    </p>
+                    @if (role == "Admin")
+                    {
+                        <a asp-action="Edit" asp-controller="Schedule" asp-route-id="@schedule.Id" class="btn btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-controller="Schedule" asp-route-id="@schedule.Id" class="btn btn-danger">Delete</a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    
+</div>
+
+
+
+<div id="departmentsContainer" class="mt-4"></div>
+
+<div class="mt-4">
+    <button id="toggleDepartments" class="btn btn-primary">View Departments</button>
+</div>
+
+<div id="departmentsContainer" class="mt-4" style="display: none;"></div> <!-- Başlangıçta gizli -->
+@section Scripts {
+    <script>
+        document.getElementById("toggleDepartments").addEventListener("click", function () {
+            const container = document.getElementById("departmentsContainer");
+            const button = document.getElementById("toggleDepartments");
+
+            // Görünürlük kontrolü
+            if (container.style.display === "none") {
+                // Departman bilgilerini yükle
+                fetch('/Home/Departments')
+                    .then(response => response.text())
+                    .then(html => {
+                        container.innerHTML = html;
+                        container.style.display = "block"; // Görünür yap
+                        button.innerText = "Hide Departments"; // Buton metnini güncelle
+                    })
+                    .catch(error => console.error('Error loading departments:', error));
+            } else {
+                container.style.display = "none"; // Gizle
+                button.innerText = "View Departments"; // Buton metnini geri değiştir
+            }
+        });
+    </script>
+}

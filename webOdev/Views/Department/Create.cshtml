@@ -1,0 +1,19 @@
+﻿@model webOdev.Models.Department
+
+<h2>Create New Department</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="Name">Name</label>
+        <input type="text" id="Name" name="Name" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="Description">Description</label>
+        <input type="text" id="Description" name="Description" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="BedCount">Bed Count</label>
+        <input type="number" id="BedCount" name="BedCount" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>

@@ -1,0 +1,58 @@
+﻿@model webOdev.Models.Schedule
+
+<h2>Edit Schedule</h2>
+
+<form asp-action="Edit" asp-controller="Schedule" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Title" class="control-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="StartTime" class="control-label"></label>
+        <input asp-for="StartTime" type="datetime-local" class="form-control" />
+        <span asp-validation-for="StartTime" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EndTime" class="control-label"></label>
+        <input asp-for="EndTime" type="datetime-local" class="form-control" />
+        <span asp-validation-for="EndTime" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="AssignedTo" class="control-label">Assigned To</label>
+        <select asp-for="AssignedTo" class="form-control">
+            @foreach (var assistant in ViewData["Assistants"] as List<webOdev.Models.Assistant>)
+            {
+                <option value="@assistant.Name" selected="@(Model.AssignedTo == assistant.Name ? "selected" : null)">
+                    @assistant.Name (Assistant)
+                </option>
+            }
+            @foreach (var doctor in ViewData["Doctors"] as List<webOdev.Models.Doctor>)
+            {
+                <option value="@doctor.Name" selected="@(Model.AssignedTo == doctor.Name ? "selected" : null)">
+                    @doctor.Name (Doctor)
+                </option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Department" class="control-label">Department</label>
+        <select asp-for="Department" class="form-control">
+            @foreach (var department in ViewData["Departments"] as List<webOdev.Models.Department>)
+            {
+                <option value="@department.Name" selected="@(Model.Department == department.Name ? "selected" : null)">
+                    @department.Name
+                </option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="Index" asp-controller="Schedule" class="btn btn-secondary">Cancel</a>
+</form>

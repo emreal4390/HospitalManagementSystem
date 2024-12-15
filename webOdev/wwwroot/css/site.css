@@ -1,0 +1,64 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+.card {
+    background-color: #f8f9fa; /* Açýk gri arka plan */
+    border: 1px solid #dee2e6; /* Hafif gri kenarlýk */
+    border-radius: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .card:hover {
+        background-color: #e9ecef; /* Hover durumunda daha koyu bir gri */
+        transform: scale(1.05); /* Kart üzerine gelince büyüt */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Gölge efekti */
+    }
+
+    .card .card-title {
+        color: #007bff; /* Baþlýklar için mavi */
+        font-weight: bold;
+    }
+
+    .card .card-text {
+        color: #6c757d; /* Açýklamalar için gri */
+    }
+
+button {
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+    button:hover {
+        background-color: #0056b3;
+        color: #fff;
+    }
+.schedule-title {
+    color: #007bff; /* Mavi renk */
+    font-size: 2.5rem; /* Büyük font boyutu */
+    font-weight: bold; /* Kalýn yazý */
+    text-align: center; /* Ortala */
+    text-transform: uppercase; /* Büyük harf yap */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Hafif gölge */
+    margin-bottom: 20px; /* Alt boþluk */
+}

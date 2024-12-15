@@ -1,0 +1,32 @@
+﻿@model IEnumerable<webOdev.Models.Department>
+
+<h2>Departments List</h2>
+
+<p>
+    <a href="@Url.Action("Create")"class="btn btn-success">Create New Department</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Bed Count</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var department in Model)
+        {
+            <tr>
+                <td>@department.Name</td>
+                <td>@department.Description</td>
+                <td>@department.BedCount</td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = department.Id })"class="btn btn-primary btn-sm">Edit</a> 
+                    <a href="@Url.Action("Delete", new { id = department.Id })"class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
